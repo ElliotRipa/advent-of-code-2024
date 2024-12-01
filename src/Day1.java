@@ -1,7 +1,5 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.sql.PseudoColumnUsage;
+import java.util.*;
 
 public class Day1 {
     
@@ -9,13 +7,18 @@ public class Day1 {
         System.out.println("Part 1 or 2?");
         Scanner scanner = new Scanner(System.in);
         String answer = scanner.nextLine();
+        long startTime = System.nanoTime();
         if(answer.equals("1")) {
             task1("input\\day1.txt");
         } else if(answer.equals("2")) {
-            task2("input\\day1.txt");
+            for(int i = 0 ; i < 1000 ; i++) {
+                task2Refactored("input\\day1.txt");
+            }
         } else {
             System.out.println("Not an option. Try again. Or don't. I'm not your dad. Probably.");
         }
+        long duration = System.nanoTime() - startTime;
+        System.out.println("Took " + duration/1000000 + " milliseconds");
     }
     
     public static void task1(String path) {
@@ -64,6 +67,33 @@ public class Day1 {
 
         System.out.println(totalSimilarity);
         
+    }
+
+    public static void task2Refactored(String path) {
+        ArrayList<ArrayList<Integer>> bothLists = getLines(path);
+        ArrayList<Integer> leftList = bothLists.get(0);
+        ArrayList<Integer> rightList = bothLists.get(1);
+
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        int totalSimilarity = 0;
+
+        for(int i : rightList) {
+            if(map.containsKey(i)) {
+                map.put(i, map.get(i) + 1);
+            } else {
+                map.put(i, 1);
+            }
+        }
+        
+        for(int i : leftList) {
+            if(map.containsKey(i)) {
+                totalSimilarity += i * map.get(i);
+            }
+        }
+
+        System.out.println(totalSimilarity);
+
     }
     
     public static ArrayList<ArrayList<Integer>> getLines(String path) {
