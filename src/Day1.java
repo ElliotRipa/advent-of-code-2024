@@ -1,4 +1,3 @@
-import java.sql.PseudoColumnUsage;
 import java.util.*;
 
 public class Day1 {
